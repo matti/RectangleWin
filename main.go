@@ -83,36 +83,36 @@ func main() {
 	cycleCornerFuncs := func(i int) { cycleFuncs(cornerFuncs, &cornerFuncTurn, i) }
 
 	hks := []HotKey{
-		(HotKey{id: 1, mod: MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_LEFT, callback: func() { cycleEdgeFuncs(0) }}),
-		(HotKey{id: 2, mod: MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_RIGHT, callback: func() { cycleEdgeFuncs(1) }}),
-		(HotKey{id: 3, mod: MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_UP, callback: func() { cycleEdgeFuncs(2) }}),
-		(HotKey{id: 4, mod: MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_DOWN, callback: func() { cycleEdgeFuncs(3) }}),
-		(HotKey{id: 5, mod: MOD_CONTROL | MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_LEFT, callback: func() { cycleCornerFuncs(0) }}),
-		(HotKey{id: 6, mod: MOD_CONTROL | MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_UP, callback: func() { cycleCornerFuncs(1) }}),
-		(HotKey{id: 7, mod: MOD_CONTROL | MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_DOWN, callback: func() { cycleCornerFuncs(2) }}),
-		(HotKey{id: 8, mod: MOD_CONTROL | MOD_ALT | MOD_WIN | MOD_NOREPEAT, vk: w32.VK_RIGHT, callback: func() { cycleCornerFuncs(3) }}),
-		(HotKey{id: 50, mod: MOD_SHIFT | MOD_WIN, vk: 0x46 /*F*/, callback: func() {
+		(HotKey{id: 1, mod: MOD_SHIFT | MOD_CONTROL | MOD_NOREPEAT, vk: w32.VK_LEFT, callback: func() { cycleEdgeFuncs(0) }}),
+		(HotKey{id: 2, mod: MOD_SHIFT | MOD_CONTROL | MOD_NOREPEAT, vk: w32.VK_RIGHT, callback: func() { cycleEdgeFuncs(1) }}),
+		(HotKey{id: 3, mod: MOD_SHIFT | MOD_CONTROL | MOD_NOREPEAT, vk: w32.VK_UP, callback: func() { cycleEdgeFuncs(2) }}),
+		(HotKey{id: 4, mod: MOD_SHIFT | MOD_CONTROL | MOD_NOREPEAT, vk: w32.VK_DOWN, callback: func() { cycleEdgeFuncs(3) }}),
+		(HotKey{id: 5, mod: MOD_SHIFT | MOD_CONTROL | MOD_NOREPEAT, vk: 0xBB, callback: func() { cycleCornerFuncs(0) }}),
+		(HotKey{id: 6, mod: MOD_SHIFT | MOD_CONTROL | MOD_NOREPEAT, vk: 0xDB, callback: func() { cycleCornerFuncs(1) }}),
+		(HotKey{id: 7, mod: MOD_SHIFT | MOD_CONTROL | MOD_NOREPEAT, vk: 0xDD, callback: func() { cycleCornerFuncs(2) }}),
+		(HotKey{id: 8, mod: MOD_SHIFT | MOD_CONTROL | MOD_NOREPEAT, vk: 0xBA, callback: func() { cycleCornerFuncs(3) }}),
+		(HotKey{id: 50, mod: MOD_SHIFT | MOD_CONTROL | MOD_NOREPEAT, vk: 0x0D /*F*/, callback: func() {
 			lastResized = 0 // cause edgeFuncTurn to be reset
 			if err := maximize(); err != nil {
 				fmt.Printf("warn: maximize: %v\n", err)
 				return
 			}
 		}}),
-		(HotKey{id: 60, mod: MOD_ALT | MOD_WIN, vk: 0x43 /*C*/, callback: func() {
-			lastResized = 0 // cause edgeFuncTurn to be reset
-			if _, err := resize(w32.GetForegroundWindow(), center); err != nil {
-				fmt.Printf("warn: resize: %v\n", err)
-				return
-			}
-		}}),
-		(HotKey{id: 70, mod: MOD_ALT | MOD_WIN, vk: 0x41 /*A*/, callback: func() {
-			hwnd := w32.GetForegroundWindow()
-			if err := toggleAlwaysOnTop(hwnd); err != nil {
-				fmt.Printf("warn: toggleAlwaysOnTop: %v\n", err)
-				return
-			}
-			fmt.Printf("> toggled always on top: %v\n", hwnd)
-		}}),
+		// (HotKey{id: 60, mod: MOD_ALT | MOD_WIN, vk: 0x43 /*C*/, callback: func() {
+		// 	lastResized = 0 // cause edgeFuncTurn to be reset
+		// 	if _, err := resize(w32.GetForegroundWindow(), center); err != nil {
+		// 		fmt.Printf("warn: resize: %v\n", err)
+		// 		return
+		// 	}
+		// }}),
+		// (HotKey{id: 70, mod: MOD_ALT | MOD_WIN, vk: 0x41 /*A*/, callback: func() {
+		// 	hwnd := w32.GetForegroundWindow()
+		// 	if err := toggleAlwaysOnTop(hwnd); err != nil {
+		// 		fmt.Printf("warn: toggleAlwaysOnTop: %v\n", err)
+		// 		return
+		// 	}
+		// 	fmt.Printf("> toggled always on top: %v\n", hwnd)
+		// }}),
 	}
 
 	var failedHotKeys []HotKey
@@ -128,6 +128,7 @@ func main() {
 		}
 		msg += "\nTo use these hotkeys in RectangleWin, close the other process using the key combination(s)."
 		showMessageBox(msg)
+		os.Exit(1)
 	}
 
 	exitCh := make(chan os.Signal)
